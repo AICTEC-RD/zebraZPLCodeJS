@@ -1,9 +1,11 @@
 //ZPL Barcode Generator
 //Ported from java to js 
-//31/05/22
+//01/06/22
 
 
 //initializing Variable
+var test=0;
+var intiParam=0; //dummy param
 var printerDotsInHead=8;
 var dpi=210;
 var widthInMM=50.80; //Label width in MM
