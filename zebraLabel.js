@@ -9,13 +9,34 @@ var dpi=210;
 var widthInMM=50.80; //Label width in MM
 var heightInMM=25.40; // Lable height in MM
 //var widthInMM=60; //Label width in MM
-// var heightInMM=40; // Lable height in MM
+//var heightInMM=40; // Lable height in MM
 var fontSizeInPoints=19; // Font Size in fontSizeInPoints - Starting point for iteratorn
 
 
 //test variables
-var text = "ZK-UFACE800/ID";
+var text = "8-port 10/100/1000Base-T Unmanaged Switch with 4 PoE , 52W PoE Power budget (EU/UK Plug)";
+const words = text.split(' ');
 var barcode= "123456"; //Initial Value
+//console.log(words);
+
+//logic to break text if word is too long
+for(var i=0;i<words.length;i++)
+{
+    if(words[i].length > 13)
+    {
+        if(words[i].includes("/") || words[i].includes("-"))
+        {
+          while(words[i].includes("/") && !(words[i].includes(" /")) )
+          words[i]=words[i].replace("/"," /");
+          while(words[i].includes("-"))
+          words[i]=words[i].replace("-"," ");    
+        }
+        else{
+          words[i]=splitText(words[i],Math.ceil(words[i].length/2)); 
+        }
+    }
+}
+text=words.join(" ");
 
 
 //formulas
@@ -53,7 +74,7 @@ fontHeightinDots=((fontSizeInPoints/72)*dpi);
 console.log(fontSizeInPoints);
 fontSizeInDots=((fontSizeInPoints/72)*dpi);
 factor=charHorizontalSize/fontSizeInPoints;
-lines = wordWrap(text,Math.ceil(widthInDots*factor*0.055)) // calibrated to the custom font size
+lines = wordWrap(text,Math.ceil(widthInDots*factor*0.05)) // calibrated to the custom font size
 maxHeightOfLines=lines.length*fontHeightinDots;
 console.log("max Height of Lines :"+maxHeightOfLines+"No of Lines :"+lines.length+"Font Size :"+fontSizeInPoints);
 }
@@ -100,8 +121,6 @@ zplCode.push(bCodeZPL);
 //End
 zplCode.push('^XZ');
 //This is the final output code for product barcode template
-console.log(zplCode); 
-
 
 
 
@@ -132,3 +151,9 @@ function wordWrap(str, charMax) {
     //console.log('arr', arr);
     return arr;
 }
+
+//function to split text at an index
+function splitText(value, index) {
+    if (value.length < index) {return value;} 
+    return [value.substring(0, index)].concat(splitText(value.substring(index), index));
+  }
